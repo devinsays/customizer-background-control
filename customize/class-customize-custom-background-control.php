@@ -67,6 +67,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @return void
 	 */
 	public function to_json() {
+
 		parent::to_json();
 
 		$choices = $this->get_background_choices();

@@ -7,16 +7,13 @@
 
 		ready: function() {
 
+			// Re-use ready function from parent class to set up the image uploader
+			var image = this;
+			image.setting = this.settings.image;
+			api.UploadControl.prototype.ready.apply( image, arguments );
+
+			// Set up the new controls
 			var control = this;
-
-			// Shortcut so that we don't have to use _.bind every time we add a callback.
-			_.bindAll( control, 'restoreDefault', 'removeFile', 'openFrame', 'select' );
-
-			// Bind events, with delegation to facilitate re-rendering.
-			control.container.on( 'click keydown', '.upload-button', control.openFrame );
-			control.container.on( 'click keydown', '.thumbnail-image img', control.openFrame );
-			control.container.on( 'click keydown', '.default-button', control.restoreDefault );
-			control.container.on( 'click keydown', '.remove-button', control.removeFile );
 
 			control.container.on( 'change', '.custom-background-repeat select',
 				function() {
