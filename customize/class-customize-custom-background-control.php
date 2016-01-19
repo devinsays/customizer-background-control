@@ -101,18 +101,24 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @since 1.0.0
 	 */
 	public function content_template() {
+
+		parent::content_template();
+
 		?>
 		<# console.log( data ); #>
 
-		<label for="{{ data.settings['default'] }}-button">
-			<# if ( data.label ) { #>
-				<span class="customize-control-title">{{ data.label }}</span>
-			<# } #>
-			<# if ( data.description ) { #>
-				<span class="description customize-control-description">{{{ data.description }}}</span>
-			<# } #>
-		</label>
-
+		<# if ( data.repeat && data.repeat.choices ) { #>
+			<li class="custom-background-repeat">
+				<# if ( data.repeat.label ) { #>
+					<span class="customize-control-title">{{ data.repeat.label }}</span>
+				<# } #>
+				<select {{{ data.repeat.link }}}>
+					<# _.each( data.repeat.choices, function( label, choice ) { #>
+						<option value="{{ choice }}" <# if ( choice === data.repeat.value ) { #> selected="selected" <# } #>>{{ label }}</option>
+					<# } ) #>
+				</select>
+			</li>
+		<# } #>
 
 		<# if ( data.size && data.size.choices ) { #>
 			<li class="custom-background-size">
