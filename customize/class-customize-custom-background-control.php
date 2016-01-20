@@ -16,7 +16,6 @@
 class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 	public $type = 'custom-background';
-
 	public $mime_type = 'image';
 
 	/**
@@ -54,6 +53,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		parent::enqueue();
 
+		// Custom scripts
 		wp_enqueue_script( 'customizer-custom-background-controls' );
 		wp_enqueue_style( 'customizer-custom-background-controls' );
 
@@ -120,7 +120,8 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		<# console.log( data ); #>
 		<# console.log( data.attachment ); #>
 
-		<# if ( data.repeat && data.repeat.choices ) { #>
+		<div class="custom-background-fields">
+		<# if ( data.attachment && data.repeat && data.repeat.choices ) { #>
 			<li class="custom-background-repeat">
 				<# if ( data.repeat.label ) { #>
 					<span class="customize-control-title">{{ data.repeat.label }}</span>
@@ -133,7 +134,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			</li>
 		<# } #>
 
-		<# if ( data.size && data.size.choices ) { #>
+		<# if ( data.attachment && data.size && data.size.choices ) { #>
 			<li class="custom-background-size">
 				<# if ( data.size.label ) { #>
 					<span class="customize-control-title">{{ data.size.label }}</span>
@@ -146,7 +147,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			</li>
 		<# } #>
 
-		<# if ( data.attach && data.attach.choices ) { #>
+		<# if ( data.attachment && data.attach && data.attach.choices ) { #>
 			<li class="custom-background-attach">
 				<# if ( data.attach.label ) { #>
 					<span class="customize-control-title">{{ data.attach.label }}</span>
@@ -159,7 +160,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			</li>
 		<# } #>
 
-		<# if ( data.position && data.position.choices ) { #>
+		<# if ( data.attachment && data.position && data.position.choices ) { #>
 			<li class="custom-background-position">
 				<# if ( data.position.label ) { #>
 					<span class="customize-control-title">{{ data.position.label }}</span>
@@ -171,6 +172,8 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				</select>
 			</li>
 		<# } #>
+
+		</div>
 
 		<?php
 	}

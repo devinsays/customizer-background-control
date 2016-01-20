@@ -15,6 +15,14 @@
 			// Set up the new controls
 			var control = this;
 
+			control.container.addClass( 'customize-control-image' );
+
+			control.container.on( 'click keydown', '.remove-button',
+				function() {
+					jQuery( '.custom-background-fields' ).hide();
+				}
+			);
+
 			control.container.on( 'change', '.custom-background-repeat select',
 				function() {
 					control.settings['repeat'].set( jQuery( this ).val() );
