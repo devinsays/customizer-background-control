@@ -72,6 +72,8 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		$choices = $this->get_background_choices();
 
+		$value = $this->value();
+
 		// Loop through each of the settings and set up the data for it.
 		foreach ( $this->settings as $setting_key => $setting_id ) {
 
@@ -80,7 +82,16 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				'value' => $this->value( $setting_key )
 			);
 
-			if ( 'repeat' === $setting_key ) {
+			if ( 'image' === $setting_key ) {
+				if ( $this->value( $setting_key ) ) {
+					// Get the attachment model for the existing file.
+					$attachment_id = attachment_url_to_postid( $this->value( $setting_key ) );
+					if ( $attachment_id ) {
+						$this->json['attachment'] = wp_prepare_attachment_for_js( $attachment_id );
+					}
+				}
+			}
+			elseif ( 'repeat' === $setting_key ) {
 				$this->json[ $setting_key ]['choices'] = $choices['repeat'];
 			}
 			elseif ( 'size' === $setting_key ) {
@@ -107,6 +118,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		?>
 		<# console.log( data ); #>
+		<# console.log( data.attachment ); #>
 
 		<# if ( data.repeat && data.repeat.choices ) { #>
 			<li class="custom-background-repeat">

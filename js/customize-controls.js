@@ -39,7 +39,19 @@
 				}
 			);
 
-		}
+		},
+
+		/**
+		 * Callback handler for when an attachment is selected in the media modal.
+		 * Gets the selected image information, and sets it within the control.
+		 */
+		select: function() {
+
+			var attachment = this.frame.state().get( 'selection' ).first().toJSON();
+			this.params.attachment = attachment;
+			this.settings['image'].set( attachment.url );
+
+		},
 
 	} );
 
