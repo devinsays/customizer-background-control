@@ -17,6 +17,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 	public $type = 'custom-background';
 	public $mime_type = 'image';
+	public $button_labels;
 
 	/**
 	 * Constructor.
@@ -31,49 +32,14 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	public function __construct( $manager, $id, $args = array() ) {
 
 		// We need to set defaults before the parent __construct is called
-		// $args = $this->default_settings( $args );
-
-		if ( ! empty( $args ) ) :
-
-			// If no settings are specified, start with an empty array
-			if ( ! isset( $args['settings'] ) ) {
-				$args['settings'] = array();
-			}
-
-			// Position
-			if ( array_key_exists( 'position', $args['settings'] ) ) {
-				echo $args['settings']['position'];
-				if ( false === $args['settings']['position'] ) {
-					unset( $args['settings']['position'] );
-				}
-			} else {
-				$manager->add_setting( $id . '_position', array(
-					'default' => 'center-center',
-					'sanitize_callback' => 'sanitize_text_field'
-				) );
-				$args['settings']['position'] = $id . '_position';
-			}
-
-		endif;
+		$args = $this->default_settings( $args );
 
 		// Calls the parent __construct
 		parent::__construct( $manager, $id, $args );
 
 		// Set button labels for image uploader
-		// $this->set_button_labels();
-
-		$button_labels = array(
-			'select'       => __( 'Select Image', 'customizer-background-control' ),
-			'change'       => __( 'Change Image', 'customizer-background-control' ),
-			'remove'       => __( 'Remove', 'customizer-background-control' ),
-			'default'      => __( 'Default', 'customizer-background-control' ),
-			'placeholder'  => __( 'No image selected', 'customizer-background-control' ),
-			'frame_title'  => __( 'Select Image', 'customizer-background-control' ),
-			'frame_button' => __( 'Choose Image', 'customizer-background-control' ),
-		);
-
-		$button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $this->id );
-		$this->button_labels = $button_labels;
+		$button_labels = $this->get_button_labels();
+		$this->button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $id );
 
 	}
 
@@ -142,7 +108,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		parent::to_json();
 
-		$choices = $this->get_background_choices();
+		$choices = $this->get_background_choices( $this->id );
 
 		// Loop through each of the settings and set up the data for it.
 		foreach ( $this->settings as $setting_key => $setting_id ) {
@@ -254,7 +220,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 *
 	 * @since 1.0.0
 	 */
-	public static function set_button_labels() {
+	public static function get_button_labels() {
 
 		$button_labels = array(
 			'select'       => __( 'Select Image', 'customizer-background-control' ),
@@ -266,8 +232,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			'frame_button' => __( 'Choose Image', 'customizer-background-control' ),
 		);
 
-		$button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $this->id );
-		$this->button_labels = $button_labels;
+		return $button_labels;
 
 	}
 
@@ -277,7 +242,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public static function get_background_choices() {
+	public static function get_background_choices( $id ) {
 
 		$choices = array(
 			'repeat' => array(
@@ -308,8 +273,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			)
 		);
 
-		// return apply_filters( 'customizer_background_choices', $choices, $this->id );
-		return $choices;
+		return apply_filters( 'customizer_background_choices', $choices, $id );
 
 	}
 
