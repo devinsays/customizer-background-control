@@ -29,6 +29,31 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @param array                $args    Optional. Arguments to override class property defaults.
 	 */
 	public function __construct( $manager, $id, $args = array() ) {
+
+		// Autoload settings
+		if ( ! empty( $args ) ) :
+
+			// If no settings have been passed, let's start with an empty array
+			if ( ! isset( $args['settings'] ) ) {
+				$args['settings'] = array();
+			}
+
+			// Position
+			if ( array_key_exists( 'position', $args['settings'] ) ) {
+				echo $args['settings']['position'];
+				if ( false === $args['settings']['position'] ) {
+					unset( $args['settings']['position'] );
+				}
+			} else {
+				$manager->add_setting( $id . '_position', array(
+					'default' => 'center-center',
+					'sanitize_callback' => 'sanitize_text_field'
+				) );
+				$args['settings']['position'] = $id . '_position';
+			}
+
+		endif;
+
 		parent::__construct( $manager, $id, $args );
 
 		$this->button_labels = array(
@@ -40,6 +65,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			'frame_title'  => __( 'Select Image', 'customizer-custom-background' ),
 			'frame_button' => __( 'Choose Image', 'customizer-custom-background' ),
 		);
+
 	}
 
 	/**
@@ -59,7 +85,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 	}
 
-		/**
+	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  1.0.0
@@ -71,8 +97,6 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		parent::to_json();
 
 		$choices = $this->get_background_choices();
-
-		$value = $this->value();
 
 		// Loop through each of the settings and set up the data for it.
 		foreach ( $this->settings as $setting_key => $setting_id ) {
@@ -101,10 +125,11 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				$this->json[ $setting_key ]['choices'] = $choices['attach'];
 			}
 			elseif ( 'position' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['position'];
+				$this->json[ $setting_key ]['choices'] = $choices['attach'];
 			}
 
 		}
+
 	}
 
 	/**
@@ -192,15 +217,13 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				'repeat'    => __( 'Repeat All', 'customizer-custom-background' ),
 				'repeat-x'  => __( 'Repeat X', 'customizer-custom-background' ),
 				'repeat-y'  => __( 'Repeat Y', 'customizer-custom-background' ),
-				'inherit'   => __( 'Inherit', 'customizer-custom-background' ),
 			),
 			'size' => array(
-				'inherit' => __( 'Inherit', 'customizer-custom-background' ),
+				'auto'    => __( 'Default', 'customizer-custom-background' ),
 				'cover'   => __( 'Cover', 'customizer-custom-background' ),
 				'contain' => __( 'Contain', 'customizer-custom-background' ),
 			),
 			'attach' => array(
-				'inherit' => __( 'Inherit', 'customizer-custom-background' ),
 				'fixed'   => __( 'Fixed', 'customizer-custom-background' ),
 				'scroll'  => __( 'Scroll', 'customizer-custom-background' ),
 			),
