@@ -15,9 +15,8 @@ Work in progress.
 
 ## How to Include the New Control
 
-* Move the file `class-customize-background-image-control.php` into your theme or plugin.
-* Include the file using `require_once` from within a customize_register callback.
-* Register the new control.
+* Drop a copy of this repository folder into your theme or plugin
+* Require`customizer-background-control.php` from your theme or plugin
 
 ### Example
 

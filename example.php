@@ -12,7 +12,7 @@ function customize_background_control_customize_register_example( $wp_customize 
 	// Add a custom background panel for testing.
 	$wp_customize->add_section( 'custom_background_section', array(
 		'priority' => 5,
-		'title' => esc_html__( 'Custom Background Testing', 'custom-background' )
+		'title' => esc_html__( 'Custom Background Example', 'customizer-background-control' )
 	) );
 
 	// Registers example_background settings
@@ -47,7 +47,7 @@ function customize_background_control_customize_register_example( $wp_customize 
 			$wp_customize,
 			'example_background',
 			array(
-				'label'		=> esc_html__( 'Example Background', 'custom-background' ),
+				'label'		=> esc_html__( 'Example Background', 'customizer-background-control' ),
 				'section'	=> 'custom_background_section',
 				'setting'	=> 'example_background',
 				// Tie a setting (defined via `$wp_customize->add_setting()`) to the control.

@@ -3,7 +3,7 @@
  * Customize API: Customize_Custom_Background_Control class
  *
  * @package Customizer Custom Background
- * @since 1.1.0
+ * @since 1.0.0
  */
 
 /**
@@ -30,10 +30,12 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 */
 	public function __construct( $manager, $id, $args = array() ) {
 
-		// Autoload settings
+		// We need to set defaults before the parent __construct is called
+		// $args = $this->default_settings( $args );
+
 		if ( ! empty( $args ) ) :
 
-			// If no settings have been passed, let's start with an empty array
+			// If no settings are specified, start with an empty array
 			if ( ! isset( $args['settings'] ) ) {
 				$args['settings'] = array();
 			}
@@ -54,17 +56,61 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		endif;
 
+		// Calls the parent __construct
 		parent::__construct( $manager, $id, $args );
 
-		$this->button_labels = array(
-			'select'       => __( 'Select Image', 'customizer-custom-background' ),
-			'change'       => __( 'Change Image', 'customizer-custom-background' ),
-			'remove'       => __( 'Remove', 'customizer-custom-background' ),
-			'default'      => __( 'Default', 'customizer-custom-background' ),
-			'placeholder'  => __( 'No image selected', 'customizer-custom-background' ),
-			'frame_title'  => __( 'Select Image', 'customizer-custom-background' ),
-			'frame_button' => __( 'Choose Image', 'customizer-custom-background' ),
+		// Set button labels for image uploader
+		// $this->set_button_labels();
+
+		$button_labels = array(
+			'select'       => __( 'Select Image', 'customizer-background-control' ),
+			'change'       => __( 'Change Image', 'customizer-background-control' ),
+			'remove'       => __( 'Remove', 'customizer-background-control' ),
+			'default'      => __( 'Default', 'customizer-background-control' ),
+			'placeholder'  => __( 'No image selected', 'customizer-background-control' ),
+			'frame_title'  => __( 'Select Image', 'customizer-background-control' ),
+			'frame_button' => __( 'Choose Image', 'customizer-background-control' ),
 		);
+
+		$button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $this->id );
+		$this->button_labels = $button_labels;
+
+	}
+
+	/**
+	 * Set default settings if none are specified.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return $args
+	 */
+	public static function default_settings( $args ) {
+
+		// Return early if no $args were passed
+		if ( empty( $args ) ) {
+			return $args;
+		}
+
+		// If no settings are specified, start with an empty array
+		if ( ! isset( $args['settings'] ) ) {
+			$args['settings'] = array();
+		}
+
+		// Position
+		if ( array_key_exists( 'position', $args['settings'] ) ) {
+			echo $args['settings']['position'];
+			if ( false === $args['settings']['position'] ) {
+				unset( $args['settings']['position'] );
+			}
+		} else {
+			$manager->add_setting( $id . '_position', array(
+				'default' => 'center-center',
+				'sanitize_callback' => 'sanitize_text_field'
+			) );
+			$args['settings']['position'] = $id . '_position';
+		}
+
+		return $args;
 
 	}
 
@@ -204,6 +250,28 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	}
 
 	/**
+	 * Set button labels
+	 *
+	 * @since 1.0.0
+	 */
+	public static function set_button_labels() {
+
+		$button_labels = array(
+			'select'       => __( 'Select Image', 'customizer-background-control' ),
+			'change'       => __( 'Change Image', 'customizer-background-control' ),
+			'remove'       => __( 'Remove', 'customizer-background-control' ),
+			'default'      => __( 'Default', 'customizer-background-control' ),
+			'placeholder'  => __( 'No image selected', 'customizer-background-control' ),
+			'frame_title'  => __( 'Select Image', 'customizer-background-control' ),
+			'frame_button' => __( 'Choose Image', 'customizer-background-control' ),
+		);
+
+		$button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $this->id );
+		$this->button_labels = $button_labels;
+
+	}
+
+	/**
 	 * The background choices.
 	 *
 	 * @since 1.0.0
@@ -213,33 +281,34 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		$choices = array(
 			'repeat' => array(
-				'no-repeat' => __( 'No Repeat', 'customizer-custom-background' ),
-				'repeat'    => __( 'Repeat All', 'customizer-custom-background' ),
-				'repeat-x'  => __( 'Repeat X', 'customizer-custom-background' ),
-				'repeat-y'  => __( 'Repeat Y', 'customizer-custom-background' ),
+				'no-repeat' => __( 'No Repeat', 'customizer-background-control' ),
+				'repeat'    => __( 'Tile', 'customizer-background-control' ),
+				'repeat-x'  => __( 'Tile Horizontally', 'customizer-background-control' ),
+				'repeat-y'  => __( 'Tile Vertically', 'customizer-background-control' ),
 			),
 			'size' => array(
-				'auto'    => __( 'Default', 'customizer-custom-background' ),
-				'cover'   => __( 'Cover', 'customizer-custom-background' ),
-				'contain' => __( 'Contain', 'customizer-custom-background' ),
+				'auto'    => __( 'Default', 'customizer-background-control' ),
+				'cover'   => __( 'Cover', 'customizer-background-control' ),
+				'contain' => __( 'Contain', 'customizer-background-control' ),
 			),
 			'attach' => array(
-				'fixed'   => __( 'Fixed', 'customizer-custom-background' ),
-				'scroll'  => __( 'Scroll', 'customizer-custom-background' ),
+				'fixed'   => __( 'Fixed', 'customizer-background-control' ),
+				'scroll'  => __( 'Scroll', 'customizer-background-control' ),
 			),
 			'position' => array(
-				'left-top'      => __( 'Left Top', 'customizer-custom-background' ),
-				'left-center'   => __( 'Left Center', 'customizer-custom-background' ),
-				'left-bottom'   => __( 'Left Bottom', 'customizer-custom-background' ),
-				'right-top'     => __( 'Right Top', 'customizer-custom-background' ),
-				'right-center'  => __( 'Right Center', 'customizer-custom-background' ),
-				'right-bottom'  => __( 'Right Bottom', 'customizer-custom-background' ),
-				'center-top'    => __( 'Center Top', 'customizer-custom-background' ),
-				'center-center' => __( 'Center Center', 'customizer-custom-background' ),
-				'center-bottom' => __( 'Center Bottom', 'customizer-custom-background' ),
-			),
+				'left-top'      => __( 'Left Top', 'customizer-background-control' ),
+				'left-center'   => __( 'Left Center', 'customizer-background-control' ),
+				'left-bottom'   => __( 'Left Bottom', 'customizer-background-control' ),
+				'right-top'     => __( 'Right Top', 'customizer-background-control' ),
+				'right-center'  => __( 'Right Center', 'customizer-background-control' ),
+				'right-bottom'  => __( 'Right Bottom', 'customizer-background-control' ),
+				'center-top'    => __( 'Center Top', 'customizer-background-control' ),
+				'center-center' => __( 'Center Center', 'customizer-background-control' ),
+				'center-bottom' => __( 'Center Bottom', 'customizer-background-control' ),
+			)
 		);
 
+		// return apply_filters( 'customizer_background_choices', $choices, $this->id );
 		return $choices;
 
 	}
