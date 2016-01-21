@@ -32,7 +32,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	public function __construct( $manager, $id, $args = array() ) {
 
 		// We need to set defaults before the parent __construct is called
-		$args = $this->default_settings( $args );
+		$args = $this->default_settings( $manager, $id, $args );
 
 		// Calls the parent __construct
 		parent::__construct( $manager, $id, $args );
@@ -50,7 +50,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @access public
 	 * @return $args
 	 */
-	public static function default_settings( $args ) {
+	public static function default_settings( $manager, $id, $args ) {
 
 		// Return early if no $args were passed
 		if ( empty( $args ) ) {
@@ -62,9 +62,47 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			$args['settings'] = array();
 		}
 
+		// Repeat
+		if ( array_key_exists( 'repeat', $args['settings'] ) ) {
+			if ( false === $args['settings']['repeat'] ) {
+				unset( $args['settings']['repeat'] );
+			}
+		} else {
+			$manager->add_setting( $id . '_repeat', array(
+				'default' => 'repeat',
+				'sanitize_callback' => 'sanitize_text_field'
+			) );
+			$args['settings']['repeat'] = $id . '_repeat';
+		}
+
+		// Size
+		if ( array_key_exists( 'size', $args['settings'] ) ) {
+			if ( false === $args['settings']['size'] ) {
+				unset( $args['settings']['size'] );
+			}
+		} else {
+			$manager->add_setting( $id . '_size', array(
+				'default' => 'auto',
+				'sanitize_callback' => 'sanitize_text_field'
+			) );
+			$args['settings']['size'] = $id . '_size';
+		}
+
+		// Attach
+		if ( array_key_exists( 'attach', $args['settings'] ) ) {
+			if ( false === $args['settings']['attach'] ) {
+				unset( $args['settings']['attach'] );
+			}
+		} else {
+			$manager->add_setting( $id . '_attach', array(
+				'default' => 'scroll',
+				'sanitize_callback' => 'sanitize_text_field'
+			) );
+			$args['settings']['attach'] = $id . '_attach';
+		}
+
 		// Position
 		if ( array_key_exists( 'position', $args['settings'] ) ) {
-			echo $args['settings']['position'];
 			if ( false === $args['settings']['position'] ) {
 				unset( $args['settings']['position'] );
 			}
@@ -137,7 +175,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				$this->json[ $setting_key ]['choices'] = $choices['attach'];
 			}
 			elseif ( 'position' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['attach'];
+				$this->json[ $setting_key ]['choices'] = $choices['position'];
 			}
 
 		}

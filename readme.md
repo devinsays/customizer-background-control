@@ -4,14 +4,14 @@ Proof-of-concept plugin for adding a custom background control.
 
 Work in progress.
 
-# TODO
+## TODO
 
-* Auto register the individual field settings
-* Save all the individual settings into the base setting
-* Test with settings versus theme_mods
-* Save attachment ID, not just URL
-* Pass labels
-* Make choices filterable
+* Add labels above select fields
+* Test default settings (make sure they each register, save, etc)
+* Save values of settings into setting as array
+* Add setting for attachment ID
+* Allow settings to save using theme_mod or settings
+* Add documentation for filters
 
 ## How to Include the New Control
 
@@ -117,8 +117,7 @@ $wp_customize->add_control(
 				'size' => 'example_background_size',
 				'attach' => 'example_background_attach',
 				'position' => example_background_position
-			),
-
+			)
 		)
 	)
 );
@@ -141,8 +140,7 @@ $wp_customize->add_control(
 			'settings'    => array(
 				'attach' => false
 				'position' => false
-			),
-
+			)
 		)
 	)
 );

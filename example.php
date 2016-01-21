@@ -27,12 +27,12 @@ function customize_background_control_customize_register_example( $wp_customize 
 	) );
 
 	$wp_customize->add_setting( 'example_background_size', array(
-			'default' => 'inherit',
+			'default' => 'auto',
 			'sanitize_callback' => 'sanitize_text_field'
 	) );
 
 	$wp_customize->add_setting( 'example_background_attach', array(
-			'default' => 'inherit',
+			'default' => 'scroll',
 			'sanitize_callback' => 'sanitize_text_field'
 	) );
 
@@ -53,12 +53,11 @@ function customize_background_control_customize_register_example( $wp_customize 
 				// Tie a setting (defined via `$wp_customize->add_setting()`) to the control.
 				'settings'    => array(
 					'image' => 'example_background_image',
-					'repeat' => 'example_background_repeat',
+					'repeat' => 'example_background_repeat', // Use false to hide the field
 					'size' => 'example_background_size',
 					'attach' => 'example_background_attach',
-					'position' => false
-				),
-
+					'position' => 'example_background_position'
+				)
 			)
 		)
 	);
