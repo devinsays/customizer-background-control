@@ -1,8 +1,25 @@
-# Customizer Custom Background
+# Customizer Background Control
 
-Proof-of-concept plugin for adding a custom background control.
+WORK IN PROGRESS
 
-Work in progress.
+This proof-of-concept plugin adds a background image control to the Customizer.
+
+The background control consists of four different fields:
+
+* Image upload
+* Background repeat select box
+* Background size select box
+* Background attach select box
+* Background position select box
+
+If no settings are defined, the control will automatically register settings based on the control id. As an example, if the control id is "example_background", the default settings will be stored as theme mods with the following ids:
+
+* example_background_url
+* example_background_id
+* example_background_repeat
+* example_background_size
+* example_background_attach
+* example_background_position
 
 ## TODO
 
