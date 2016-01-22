@@ -3,7 +3,7 @@
 	/**
 	 * Class extends the UploadControl
 	 */
-	api.controlConstructor['custom-background'] = api.UploadControl.extend( {
+	api.controlConstructor['background-image'] = api.UploadControl.extend( {
 
 		ready: function() {
 
@@ -19,29 +19,29 @@
 
 			control.container.on( 'click keydown', '.remove-button',
 				function() {
-					jQuery( '.custom-background-fields' ).hide();
+					jQuery( '.background-image-fields' ).hide();
 				}
 			);
 
-			control.container.on( 'change', '.custom-background-repeat select',
+			control.container.on( 'change', '.background-image-repeat select',
 				function() {
 					control.settings['repeat'].set( jQuery( this ).val() );
 				}
 			);
 
-			control.container.on( 'change', '.custom-background-size select',
+			control.container.on( 'change', '.background-image-size select',
 				function() {
 					control.settings['size'].set( jQuery( this ).val() );
 				}
 			);
 
-			control.container.on( 'change', '.custom-background-attach select',
+			control.container.on( 'change', '.background-image-attach select',
 				function() {
 					control.settings['attach'].set( jQuery( this ).val() );
 				}
 			);
 
-			control.container.on( 'change', '.custom-background-position select',
+			control.container.on( 'change', '.background-image-position select',
 				function() {
 					control.settings['position'].set( jQuery( this ).val() );
 				}
@@ -62,7 +62,5 @@
 		},
 
 	} );
-
-	console.log( 'custom-background loaded' );
 
 } )( wp.customize );

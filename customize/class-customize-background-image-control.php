@@ -22,7 +22,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'custom-background';
+	public $type = 'background-image';
 
 	/**
 	 * Mime type for upload control.
@@ -179,8 +179,8 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		parent::enqueue();
 
 		// Custom scripts
-		wp_enqueue_script( 'customizer-custom-background-controls' );
-		wp_enqueue_style( 'customizer-custom-background-controls' );
+		wp_enqueue_script( 'customizer-background-image-controls' );
+		wp_enqueue_style( 'customizer-background-image-controls' );
 
 	}
 
@@ -242,9 +242,9 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		parent::content_template();
 		?>
 
-		<div class="custom-background-fields">
+		<div class="background-image-fields">
 		<# if ( data.attachment && data.repeat && data.repeat.choices ) { #>
-			<li class="custom-background-repeat">
+			<li class="background-image-repeat">
 				<# if ( data.repeat.label ) { #>
 					<span class="customize-control-title">{{ data.repeat.label }}</span>
 				<# } #>
@@ -257,7 +257,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		<# } #>
 
 		<# if ( data.attachment && data.size && data.size.choices ) { #>
-			<li class="custom-background-size">
+			<li class="background-image-size">
 				<# if ( data.size.label ) { #>
 					<span class="customize-control-title">{{ data.size.label }}</span>
 				<# } #>
@@ -270,7 +270,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		<# } #>
 
 		<# if ( data.attachment && data.position && data.position.choices ) { #>
-			<li class="custom-background-position">
+			<li class="background-image-position">
 				<# if ( data.position.label ) { #>
 					<span class="customize-control-title">{{ data.position.label }}</span>
 				<# } #>
@@ -283,7 +283,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		<# } #>
 
 		<# if ( data.attachment && data.attach && data.attach.choices ) { #>
-			<li class="custom-background-attach">
+			<li class="background-image-attach">
 				<# if ( data.attach.label ) { #>
 					<span class="customize-control-title">{{ data.attach.label }}</span>
 				<# } #>

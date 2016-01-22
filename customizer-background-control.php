@@ -16,22 +16,22 @@
  * @access public
  * @return void
  */
-function custom_background_customize_controls_register_scripts() {
+function customize_background_controls_register_scripts() {
 
 	$uri = trailingslashit( plugin_dir_url( __FILE__ ) );
 
 	wp_register_script(
-		'customizer-custom-background-controls',
+		'customizer-background-image-controls',
 		esc_url( $uri . 'js/customize-controls.js' ),
 		array( 'customize-controls' )
 	);
 
 	wp_register_style(
-		'customizer-custom-background-controls',
+		'customizer-background-image-controls',
 		esc_url( $uri . 'css/customize-controls.css' )
 	);
 }
-add_action( 'customize_controls_enqueue_scripts', 'custom_background_customize_controls_register_scripts' );
+add_action( 'customize_controls_enqueue_scripts', 'customize_background_controls_register_scripts' );
 
 /**
  * Register customizer panels, sections, settings, and controls.
