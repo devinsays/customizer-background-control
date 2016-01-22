@@ -15,9 +15,50 @@
  */
 class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
+	/**
+	 * The type of customize control being rendered.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string
+	 */
 	public $type = 'custom-background';
+
+	/**
+	 * Mime type for upload control.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    string
+	 */
 	public $mime_type = 'image';
-	public $button_labels;
+
+	/**
+	 * Labels for upload control buttons.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $button_labels = array();
+
+	/**
+	 * Field labels
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $field_labels = array();
+
+	/**
+	 * Background choices for the select fields.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @var    array
+	 */
+	public $background_choices = array();
 
 	/**
 	 * Constructor.
@@ -40,6 +81,14 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		// Set button labels for image uploader
 		$button_labels = $this->get_button_labels();
 		$this->button_labels = apply_filters( 'customizer_background_button_labels', $button_labels, $id );
+
+		// Set field labels
+		$field_labels = $this->get_field_labels();
+		$this->field_labels = apply_filters( 'customizer_background_field_labels', $field_labels, $id );
+
+		// Set background choices
+		$background_choices = $this->get_background_choices();
+		$this->background_choices = apply_filters( 'customizer_background_choices', $background_choices, $id );
 
 	}
 
@@ -146,14 +195,16 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		parent::to_json();
 
-		$choices = $this->get_background_choices( $this->id );
+		$background_choices = $this->background_choices;
+		$field_labels = $this->field_labels;
 
 		// Loop through each of the settings and set up the data for it.
 		foreach ( $this->settings as $setting_key => $setting_id ) {
 
 			$this->json[ $setting_key ] = array(
 				'link'  => $this->get_link( $setting_key ),
-				'value' => $this->value( $setting_key )
+				'value' => $this->value( $setting_key ),
+				'label' => isset( $field_labels[ $setting_key ] ) ? $field_labels[ $setting_key ] : ''
 			);
 
 			if ( 'image' === $setting_key ) {
@@ -166,18 +217,17 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				}
 			}
 			elseif ( 'repeat' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['repeat'];
+				$this->json[ $setting_key ]['choices'] = $background_choices['repeat'];
 			}
 			elseif ( 'size' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['size'];
-			}
-			elseif ( 'attach' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['attach'];
+				$this->json[ $setting_key ]['choices'] = $background_choices['size'];
 			}
 			elseif ( 'position' === $setting_key ) {
-				$this->json[ $setting_key ]['choices'] = $choices['position'];
+				$this->json[ $setting_key ]['choices'] = $background_choices['position'];
 			}
-
+			elseif ( 'attach' === $setting_key ) {
+				$this->json[ $setting_key ]['choices'] = $background_choices['attach'];
+			}
 		}
 
 	}
@@ -190,10 +240,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	public function content_template() {
 
 		parent::content_template();
-
 		?>
-		<# console.log( data ); #>
-		<# console.log( data.attachment ); #>
 
 		<div class="custom-background-fields">
 		<# if ( data.attachment && data.repeat && data.repeat.choices ) { #>
@@ -222,19 +269,6 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			</li>
 		<# } #>
 
-		<# if ( data.attachment && data.attach && data.attach.choices ) { #>
-			<li class="custom-background-attach">
-				<# if ( data.attach.label ) { #>
-					<span class="customize-control-title">{{ data.attach.label }}</span>
-				<# } #>
-				<select {{{ data.attach.link }}}>
-					<# _.each( data.attach.choices, function( label, choice ) { #>
-						<option value="{{ choice }}" <# if ( choice === data.attach.value ) { #> selected="selected" <# } #>>{{ label }}</option>
-					<# } ) #>
-				</select>
-			</li>
-		<# } #>
-
 		<# if ( data.attachment && data.position && data.position.choices ) { #>
 			<li class="custom-background-position">
 				<# if ( data.position.label ) { #>
@@ -248,13 +282,26 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			</li>
 		<# } #>
 
+		<# if ( data.attachment && data.attach && data.attach.choices ) { #>
+			<li class="custom-background-attach">
+				<# if ( data.attach.label ) { #>
+					<span class="customize-control-title">{{ data.attach.label }}</span>
+				<# } #>
+				<select {{{ data.attach.link }}}>
+					<# _.each( data.attach.choices, function( label, choice ) { #>
+						<option value="{{ choice }}" <# if ( choice === data.attach.value ) { #> selected="selected" <# } #>>{{ label }}</option>
+					<# } ) #>
+				</select>
+			</li>
+		<# } #>
+
 		</div>
 
 		<?php
 	}
 
 	/**
-	 * Set button labels
+	 * Returns button labels.
 	 *
 	 * @since 1.0.0
 	 */
@@ -275,28 +322,42 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	}
 
 	/**
-	 * The background choices.
+	 * Returns field labels.
+	 *
+	 * @since 1.0.0
+	 */
+	public static function get_field_labels() {
+
+		$field_labels = array(
+			'repeat'	=> __( 'Background Repeat', 'customizer-background-control' ),
+			'size'		=> __( 'Background Size', 'customizer-background-control' ),
+			'position'	=> __( 'Background Position', 'customizer-background-control' ),
+			'attach'	=> __( 'Background Attachment', 'customizer-background-control' )
+		);
+
+		return $field_labels;
+
+	}
+
+	/**
+	 * Returns the background choices.
 	 *
 	 * @since 1.0.0
 	 * @return array
 	 */
-	public static function get_background_choices( $id ) {
+	public static function get_background_choices() {
 
 		$choices = array(
 			'repeat' => array(
 				'no-repeat' => __( 'No Repeat', 'customizer-background-control' ),
 				'repeat'    => __( 'Tile', 'customizer-background-control' ),
 				'repeat-x'  => __( 'Tile Horizontally', 'customizer-background-control' ),
-				'repeat-y'  => __( 'Tile Vertically', 'customizer-background-control' ),
+				'repeat-y'  => __( 'Tile Vertically', 'customizer-background-control' )
 			),
 			'size' => array(
 				'auto'    => __( 'Default', 'customizer-background-control' ),
 				'cover'   => __( 'Cover', 'customizer-background-control' ),
-				'contain' => __( 'Contain', 'customizer-background-control' ),
-			),
-			'attach' => array(
-				'fixed'   => __( 'Fixed', 'customizer-background-control' ),
-				'scroll'  => __( 'Scroll', 'customizer-background-control' ),
+				'contain' => __( 'Contain', 'customizer-background-control' )
 			),
 			'position' => array(
 				'left-top'      => __( 'Left Top', 'customizer-background-control' ),
@@ -307,11 +368,15 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				'right-bottom'  => __( 'Right Bottom', 'customizer-background-control' ),
 				'center-top'    => __( 'Center Top', 'customizer-background-control' ),
 				'center-center' => __( 'Center Center', 'customizer-background-control' ),
-				'center-bottom' => __( 'Center Bottom', 'customizer-background-control' ),
+				'center-bottom' => __( 'Center Bottom', 'customizer-background-control' )
+			),
+			'attach' => array(
+				'fixed'   => __( 'Fixed', 'customizer-background-control' ),
+				'scroll'  => __( 'Scroll', 'customizer-background-control' )
 			)
 		);
 
-		return apply_filters( 'customizer_background_choices', $choices, $id );
+		return $choices;
 
 	}
 

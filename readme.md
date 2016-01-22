@@ -6,7 +6,6 @@ Work in progress.
 
 ## TODO
 
-* Add labels above select fields
 * Test default settings (make sure they each register, save, etc)
 * Save values of settings into setting as array
 * Add setting for attachment ID
