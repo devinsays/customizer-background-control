@@ -8,9 +8,9 @@
 		ready: function() {
 
 			// Re-use ready function from parent class to set up the image uploader
-			var image = this;
-			image.setting = this.settings.image;
-			api.UploadControl.prototype.ready.apply( image, arguments );
+			var image_url = this;
+			image_url.setting = this.settings.image_url;
+			api.UploadControl.prototype.ready.apply( image_url, arguments );
 
 			// Set up the new controls
 			var control = this;
@@ -57,7 +57,8 @@
 
 			var attachment = this.frame.state().get( 'selection' ).first().toJSON();
 			this.params.attachment = attachment;
-			this.settings['image'].set( attachment.url );
+			this.settings['image_url'].set( attachment.url );
+			this.settings['image_id'].set( attachment.id );
 
 		},
 

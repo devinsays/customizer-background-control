@@ -111,6 +111,18 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 			$args['settings'] = array();
 		}
 
+		// Image ID
+		if ( array_key_exists( 'image_id', $args['settings'] ) ) {
+			if ( false === $args['settings']['image_id'] ) {
+				unset( $args['settings']['image_id'] );
+			}
+		} else {
+			$manager->add_setting( $id . '_image_id', array(
+				'sanitize_callback' => 'absint'
+			) );
+			$args['settings']['_image_id'] = $id . '_image_id';
+		}
+
 		// Repeat
 		if ( array_key_exists( 'repeat', $args['settings'] ) ) {
 			if ( false === $args['settings']['repeat'] ) {
@@ -207,7 +219,7 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 				'label' => isset( $field_labels[ $setting_key ] ) ? $field_labels[ $setting_key ] : ''
 			);
 
-			if ( 'image' === $setting_key ) {
+			if ( 'image_url' === $setting_key ) {
 				if ( $this->value( $setting_key ) ) {
 					// Get the attachment model for the existing file.
 					$attachment_id = attachment_url_to_postid( $this->value( $setting_key ) );

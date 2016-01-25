@@ -16,9 +16,14 @@ function customize_background_control_customize_register_example( $wp_customize 
 	) );
 
 	// Registers example_background settings
-	$wp_customize->add_setting( 'example_background_image', array(
+	$wp_customize->add_setting( 'example_background_image_url', array(
 		'default' => '',
 		'sanitize_callback' => 'esc_url'
+	) );
+
+	$wp_customize->add_setting( 'example_background_image_id', array(
+		'default' => '',
+		'sanitize_callback' => 'absint'
 	) );
 
 	$wp_customize->add_setting( 'example_background_repeat', array(
@@ -52,7 +57,8 @@ function customize_background_control_customize_register_example( $wp_customize 
 				'setting'	=> 'example_background',
 				// Tie a setting (defined via `$wp_customize->add_setting()`) to the control.
 				'settings'    => array(
-					'image' => 'example_background_image',
+					'image_url' => 'example_background_image_url',
+					'image_id' => 'example_background_image_id',
 					'repeat' => 'example_background_repeat', // Use false to hide the field
 					'size' => 'example_background_size',
 					'attach' => 'example_background_attach',

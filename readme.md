@@ -14,8 +14,8 @@ The background control consists of four different fields:
 
 If no settings are defined, the control will automatically register settings based on the control id. As an example, if the control id is "example_background", the default settings will be stored as theme mods with the following ids:
 
-* example_background_url
-* example_background_id
+* example_background_image_url
+* example_background_image_id
 * example_background_repeat
 * example_background_size
 * example_background_attach
@@ -24,9 +24,8 @@ If no settings are defined, the control will automatically register settings bas
 ## TODO
 
 * Test default settings (make sure they each register, save, etc)
-* Save values of settings into setting as array
-* Add setting for attachment ID
-* Allow settings to save using theme_mod or settings
+* Save values of settings into setting as array (and perhaps drop individual settings)
+* Use $setting param as base for default rather than $id
 * Add documentation for filters
 
 ## How to Include the New Control
@@ -61,13 +60,14 @@ add_action( 'customize_register', 'background_image_customize_register' );
 
 ## Setting Defaults
 
-| Setting                | Default         | Sanitization        |
-| ---------------------- | --------------- | ------------------- |
-| $setting . '_image'    | null            | esc_url             |
-| $setting . '_repeat'   | repeat          | sanitize_text_field |
-| $setting . '_size'     | auto            | sanitize_text_field |
-| $setting . '_attach'   | scroll          | sanitize_text_field |
-| $setting . '_position' | center-center   | sanitize_text_field |
+| Setting                    | Default         | Sanitization        |
+| -------------------------- | --------------- | ------------------- |
+| $setting . '_image_url'    | null            | esc_url             |
+| $setting . '_image_id'     | null            | absint              |
+| $setting . '_repeat'       | repeat          | sanitize_text_field |
+| $setting . '_size'         | auto            | sanitize_text_field |
+| $setting . '_attach'       | scroll          | sanitize_text_field |
+| $setting . '_position'     | center-center   | sanitize_text_field |
 
 ## How to Add a Background Control
 
@@ -93,8 +93,13 @@ If you'd like you set different default settings or sanitization, you can regist
 
 ```
 // Registers example_background settings
-$wp_customize->add_setting( 'example_background_image', array(
+$wp_customize->add_setting( 'example_background_image_url', array(
 	'sanitize_callback' => 'esc_url'
+) );
+
+$wp_customize->add_setting( 'example_background_image_id', array(
+	'default' => '',
+	'sanitize_callback' => 'absint'
 ) );
 
 $wp_customize->add_setting( 'example_background_repeat', array(
@@ -128,7 +133,8 @@ $wp_customize->add_control(
 			'setting'	=> 'example_background',
 			// Tie a setting ( defined via $wp_customize->add_setting() ) to the control.
 			'settings'    => array(
-				'image' => 'example_background_image',
+				'image_url' => 'example_background_image_url',
+				'image_id' => 'example_background_image_id',
 				'repeat' => 'example_background_repeat',
 				'size' => 'example_background_size',
 				'attach' => 'example_background_attach',
