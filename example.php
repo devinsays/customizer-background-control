@@ -17,33 +17,31 @@ function customize_background_control_customize_register_example( $wp_customize 
 
 	// Registers example_background settings
 	$wp_customize->add_setting( 'example_background_image_url', array(
-		'default' => '',
 		'sanitize_callback' => 'esc_url'
 	) );
 
 	$wp_customize->add_setting( 'example_background_image_id', array(
-		'default' => '',
 		'sanitize_callback' => 'absint'
 	) );
 
 	$wp_customize->add_setting( 'example_background_repeat', array(
-			'default' => 'no-repeat',
-			'sanitize_callback' => 'sanitize_text_field'
+		'default' => 'no-repeat',
+		'sanitize_callback' => 'sanitize_text_field'
 	) );
 
 	$wp_customize->add_setting( 'example_background_size', array(
-			'default' => 'auto',
-			'sanitize_callback' => 'sanitize_text_field'
+		'default' => 'auto',
+		'sanitize_callback' => 'sanitize_text_field'
 	) );
 
 	$wp_customize->add_setting( 'example_background_attach', array(
-			'default' => 'scroll',
-			'sanitize_callback' => 'sanitize_text_field'
+		'default' => 'scroll',
+		'sanitize_callback' => 'sanitize_text_field'
 	) );
 
 	$wp_customize->add_setting( 'example_background_position', array(
-			'default' => 'center-center',
-			'sanitize_callback' => 'sanitize_text_field'
+		'default' => 'center-center',
+		'sanitize_callback' => 'sanitize_text_field'
 	) );
 
 	// Registers example_background control
@@ -54,15 +52,14 @@ function customize_background_control_customize_register_example( $wp_customize 
 			array(
 				'label'		=> esc_html__( 'Example Background', 'customizer-background-control' ),
 				'section'	=> 'custom_background_section',
-				'setting'	=> 'example_background',
 				// Tie a setting (defined via `$wp_customize->add_setting()`) to the control.
 				'settings'    => array(
 					'image_url' => 'example_background_image_url',
 					'image_id' => 'example_background_image_id',
 					'repeat' => 'example_background_repeat', // Use false to hide the field
 					'size' => 'example_background_size',
-					'attach' => 'example_background_attach',
-					'position' => 'example_background_position'
+					'position' => 'example_background_position',
+					'attach' => 'example_background_attach'
 				)
 			)
 		)

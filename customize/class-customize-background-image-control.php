@@ -72,9 +72,6 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 	 */
 	public function __construct( $manager, $id, $args = array() ) {
 
-		// We need to set defaults before the parent __construct is called
-		$args = $this->default_settings( $manager, $id, $args );
-
 		// Calls the parent __construct
 		parent::__construct( $manager, $id, $args );
 
@@ -89,93 +86,6 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 		// Set background choices
 		$background_choices = $this->get_background_choices();
 		$this->background_choices = apply_filters( 'customizer_background_choices', $background_choices, $id );
-
-	}
-
-	/**
-	 * Set default settings if none are specified.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 * @return $args
-	 */
-	public static function default_settings( $manager, $id, $args ) {
-
-		// Return early if no $args were passed
-		if ( empty( $args ) ) {
-			return $args;
-		}
-
-		// If no settings are specified, start with an empty array
-		if ( ! isset( $args['settings'] ) ) {
-			$args['settings'] = array();
-		}
-
-		// Image ID
-		if ( array_key_exists( 'image_id', $args['settings'] ) ) {
-			if ( false === $args['settings']['image_id'] ) {
-				unset( $args['settings']['image_id'] );
-			}
-		} else {
-			$manager->add_setting( $id . '_image_id', array(
-				'sanitize_callback' => 'absint'
-			) );
-			$args['settings']['_image_id'] = $id . '_image_id';
-		}
-
-		// Repeat
-		if ( array_key_exists( 'repeat', $args['settings'] ) ) {
-			if ( false === $args['settings']['repeat'] ) {
-				unset( $args['settings']['repeat'] );
-			}
-		} else {
-			$manager->add_setting( $id . '_repeat', array(
-				'default' => 'repeat',
-				'sanitize_callback' => 'sanitize_text_field'
-			) );
-			$args['settings']['repeat'] = $id . '_repeat';
-		}
-
-		// Size
-		if ( array_key_exists( 'size', $args['settings'] ) ) {
-			if ( false === $args['settings']['size'] ) {
-				unset( $args['settings']['size'] );
-			}
-		} else {
-			$manager->add_setting( $id . '_size', array(
-				'default' => 'auto',
-				'sanitize_callback' => 'sanitize_text_field'
-			) );
-			$args['settings']['size'] = $id . '_size';
-		}
-
-		// Attach
-		if ( array_key_exists( 'attach', $args['settings'] ) ) {
-			if ( false === $args['settings']['attach'] ) {
-				unset( $args['settings']['attach'] );
-			}
-		} else {
-			$manager->add_setting( $id . '_attach', array(
-				'default' => 'scroll',
-				'sanitize_callback' => 'sanitize_text_field'
-			) );
-			$args['settings']['attach'] = $id . '_attach';
-		}
-
-		// Position
-		if ( array_key_exists( 'position', $args['settings'] ) ) {
-			if ( false === $args['settings']['position'] ) {
-				unset( $args['settings']['position'] );
-			}
-		} else {
-			$manager->add_setting( $id . '_position', array(
-				'default' => 'center-center',
-				'sanitize_callback' => 'sanitize_text_field'
-			) );
-			$args['settings']['position'] = $id . '_position';
-		}
-
-		return $args;
 
 	}
 
