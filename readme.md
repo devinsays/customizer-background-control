@@ -60,7 +60,6 @@ $wp_customize->add_setting( 'example_background_image_url', array(
 ) );
 
 $wp_customize->add_setting( 'example_background_image_id', array(
-	'default' => '',
 	'sanitize_callback' => 'absint'
 ) );
 
