@@ -4,7 +4,8 @@
  * Plugin URI:  https://github.com/devinsays
  * Author:      Devin Price
  * Author URI:  http://wptheming.com
- * Description: Registers a new custom customizer control for backgrounds.
+ * Description: Registers a new custom customizer control for backgrounds
+ * Version:		1.0.0
  * License:     GNU General Public License v2.0 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -18,18 +19,26 @@
  */
 function customize_background_controls_register_scripts() {
 
-	$uri = trailingslashit( plugin_dir_url( __FILE__ ) );
+	// Since this can be used as a drop-in library
+	// We'll load the JS relative to this PHP file
+	$file = dirname( __FILE__ );
+
+	// Get the URL and path to wp-content
+	$content_url = untrailingslashit( dirname( dirname( get_stylesheet_directory_uri() ) ) );
+	$content_dir = untrailingslashit( WP_CONTENT_DIR );
+
+	// Fix path on Windows servers
+	$file = wp_normalize_path( $file );
+	$content_dir = wp_normalize_path( $content_dir );
+
+	$uri = str_replace( $content_dir, $content_url, $file );
 
 	wp_register_script(
 		'customizer-background-image-controls',
-		esc_url( $uri . 'js/customize-controls.js' ),
+		esc_url( $uri . '/js/customize-controls.js' ),
 		array( 'customize-controls' )
 	);
 
-	wp_register_style(
-		'customizer-background-image-controls',
-		esc_url( $uri . 'css/customize-controls.css' )
-	);
 }
 add_action( 'customize_controls_enqueue_scripts', 'customize_background_controls_register_scripts' );
 

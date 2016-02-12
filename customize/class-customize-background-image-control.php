@@ -102,7 +102,6 @@ class Customize_Custom_Background_Control extends WP_Customize_Upload_Control {
 
 		// Custom scripts
 		wp_enqueue_script( 'customizer-background-image-controls' );
-		wp_enqueue_style( 'customizer-background-image-controls' );
 
 	}
 

@@ -1,21 +1,15 @@
 # Customizer Background Control
 
-WORK IN PROGRESS
-
 This proof-of-concept plugin adds a background image control to the Customizer.
 
 The background control consists of six possible settings:
 
 * Image upload (required)
+* Image ID
 * Background repeat select box
 * Background size select box
 * Background attach select box
 * Background position select box
-
-## TODO
-
-* Test with theme mods and settings
-* Add documentation for filters
 
 ## How to Include the New Control
 
@@ -51,7 +45,9 @@ add_action( 'customize_register', 'background_image_customize_register' );
 
 Although this is a single Customizer control, settings need to be registered for each field that displays (repeat, size, attach, etc). The only required setting is image_url. If a image_id setting is registered, the ID will also be saved.
 
-I realize this is quite a bit of setting syntax for a single control. I experimented with auto-registering settings (view the GitHub history), but decided breaking WordPress conventions might cause confusion (especially for people wanting to use alternate defaults or sanitization). So, copy/paste away.
+I realize this is quite a bit of setting syntax for a single control. I experimented with auto-registering settings, but that made it difficult to use alternate defaults or sanitization.
+
+Another approach might be to register a single setting and have the control save all the fields into a serialized array rather than individual settings. Defaults could be passed as an array in the when the setting is registered. This would definitely decrease the amount of syntax required to set up the control and seems a bit more elegant, I just haven't had time to experiment with it yet.
 
 ```
 // Registers example_background settings
@@ -64,7 +60,7 @@ $wp_customize->add_setting( 'example_background_image_id', array(
 ) );
 
 $wp_customize->add_setting( 'example_background_repeat', array(
-		'default' => 'no-repeat',
+		'default' => 'repeat',
 		'sanitize_callback' => 'sanitize_text_field'
 ) );
 
@@ -73,13 +69,13 @@ $wp_customize->add_setting( 'example_background_size', array(
 		'sanitize_callback' => 'sanitize_text_field'
 ) );
 
-$wp_customize->add_setting( 'example_background_attach', array(
-		'default' => 'scroll',
+$wp_customize->add_setting( 'example_background_position', array(
+		'default' => 'center-center',
 		'sanitize_callback' => 'sanitize_text_field'
 ) );
 
-$wp_customize->add_setting( 'example_background_position', array(
-		'default' => 'center-center',
+$wp_customize->add_setting( 'example_background_attach', array(
+		'default' => 'scroll',
 		'sanitize_callback' => 'sanitize_text_field'
 ) );
 
